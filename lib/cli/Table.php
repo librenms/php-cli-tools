@@ -27,6 +27,7 @@ class Table {
 	protected $_footers = array();
 	protected $_width = array();
 	protected $_rows = array();
+	protected $_use_index = false;
 
 	/**
 	 * Initializes the `Table` class.
@@ -79,6 +80,7 @@ class Table {
 		$this->_width = array();
 		$this->_rows = array();
 		$this->_footers = array();
+		$this->_use_index = false;
 		return $this;
 	}
 
@@ -212,6 +214,14 @@ class Table {
 		$this->_rows[] = $this->checkRow($row);
 	}
 
+    /**
+     * Sets if we should output the arrays index
+     */
+	public function useIndex()
+    {
+        $this->_use_index = true;
+    }
+
 	/**
 	 * Clears all previous rows and adds the given rows.
 	 *
@@ -220,7 +230,10 @@ class Table {
 	 */
 	public function setRows(array $rows) {
 		$this->_rows = array();
-		foreach ($rows as $row) {
+		foreach ($rows as $id => $row) {
+		    if ($this->_use_index === true) {
+		        $row = array_merge(array($id), $row);
+            }
 			$this->addRow($row);
 		}
 	}
